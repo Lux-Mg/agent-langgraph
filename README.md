@@ -69,7 +69,7 @@ The state passed between nodes (`AgentState`) carries the full message history (
 
 - **LangGraph 0.2** — graph orchestration with built-in `MemorySaver` checkpointer (one thread = one conversation)
 - **LangChain Core** — message types and structured output via `with_structured_output(schema)`
-- **Ollama + Qwen 2.5 7B** — local LLM for all decision and synthesis nodes
+- **Ollama + Qwen 3 8B** — local LLM for all decision and synthesis nodes. The earlier version used Qwen 2.5 7B and failed the structured-output schema ~20% of the time in the router/reflect nodes (returning `None`). Qwen 3 8B handles the JSON schema reliably and grounds answers in the retrieved comments instead of drifting to secondary movies in the context.
 - **Demo #1 RAG** — used as a tool over HTTP. The agent does NOT re-implement retrieval; it makes `POST /trends` and `POST /recommend` calls to the running RAG service.
 
 ## Running it
