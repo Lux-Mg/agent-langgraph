@@ -84,9 +84,20 @@ cp .env.example .env
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
-python cli.py             # start a REPL — one thread, in-memory conversation
+# CLI — REPL for quick testing
+python cli.py
 python cli.py --debug     # show intent / iteration / docs_count after each turn
+
+# Web UI (Streamlit) — chat with persistent conversation
+streamlit run ui.py --server.port 8502
+# Open:  http://localhost:8502
 ```
+
+### The Streamlit UI
+
+`ui.py` exposes the agent as a chat. Each browser session is one conversation — the agent remembers prior turns via a `thread_id` stored in `st.session_state`. The sidebar shows the current intent, iteration count, and number of retrieved docs after each turn (a debug-friendly view of what the graph just did). An expander below the chat shows the comments that fed the last answer.
+
+The UI talks to the agent in-process via `graph.invoke` — no HTTP. The graph itself talks to the RAG service over HTTP. So: UI → graph → RAG service. The graph object is created once per Streamlit process (`@st.cache_resource`) so the LLM and embeddings don't reload on each rerun.
 
 ## Repository layout
 
@@ -98,6 +109,8 @@ python cli.py --debug     # show intent / iteration / docs_count after each turn
 │   ├── nodes.py           # router · retrieve · reflect · answer · clarify · off_topic
 │   └── graph.py           # StateGraph wiring + MemorySaver checkpointer
 ├── cli.py                 # REPL
+├── ui.py                  # Streamlit chat UI (browser-based front-end)
+├── test_agent.py          # smoke test: 4 turns covering trends/follow-up/recommend/off-topic
 ├── requirements.txt
 ├── .env.example
 └── README.md
