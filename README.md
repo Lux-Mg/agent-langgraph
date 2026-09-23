@@ -69,7 +69,7 @@ The state passed between nodes (`AgentState`) carries the full message history (
 
 - **LangGraph 0.2** — graph orchestration with built-in `MemorySaver` checkpointer (one thread = one conversation)
 - **LangChain Core** — message types and structured output via `with_structured_output(schema)`
-- **Ollama + Qwen 3 8B** — local LLM for all decision and synthesis nodes. The earlier version used Qwen 2.5 7B and failed the structured-output schema ~20% of the time in the router/reflect nodes (returning `None`). Qwen 3 8B handles the JSON schema reliably and grounds answers in the retrieved comments instead of drifting to secondary movies in the context.
+- **Ollama + Qwen 2.5 7B** — the current default local LLM for routing, reflection, and answer synthesis. The model is configurable through `OLLAMA_MODEL`.
 - **Demo #1 RAG** — used as a tool over HTTP. The agent does NOT re-implement retrieval; it makes `POST /trends` and `POST /recommend` calls to the running RAG service.
 
 ## Running it
@@ -77,7 +77,7 @@ The state passed between nodes (`AgentState`) carries the full message history (
 You need the [RAG service from Demo #1](https://github.com/Lux-Mg/rag-lenguatrends) running on port 8000. Then:
 
 ```bash
-git clone <this-repo>
+git clone https://github.com/Lux-Mg/agent-langgraph.git
 cd agent-langgraph
 cp .env.example .env
 
@@ -115,6 +115,8 @@ The UI talks to the agent in-process via `graph.invoke` — no HTTP. The graph i
 ├── .env.example
 └── README.md
 ```
+
+`test_agent.py` is a live four-turn smoke-test script rather than an isolated unit test: it requires both Ollama and the RAG service (including its corpus) to be running.
 
 ## What I learned
 

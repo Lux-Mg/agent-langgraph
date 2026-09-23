@@ -77,7 +77,7 @@ with st.sidebar:
         st.caption("(después de tu primer mensaje aparecerá aquí)")
 
     st.markdown("---")
-    st.caption("Stack: LangGraph + Qwen 3 8B + RAG (BGE-M3 + Qwen 3).")
+    st.caption("Stack: LangGraph + Qwen 2.5 7B + RAG (BGE-M3 + Qwen 3).")
 
 
 # --- main: chat ---
